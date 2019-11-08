@@ -1,0 +1,109 @@
+@import "config.less";
+
+.maxwidth(){
+    width:@MAXWIDTH;
+    margin: 0 auto;
+}
+
+.box(){
+    display: box;
+    display: -webkit-box;
+    box-align:center;
+    -webkit-box-align:center;
+}
+.box-item(){
+    -webkit-box-flex:1;
+    box-flex:1;
+    text-align: center;
+}
+
+.limitline1{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+
+.c(@color:#fff){
+    color: @color;
+}
+
+.flex(){
+    display: flex;
+    display: -webkit-flex;
+}
+.flex-item(@val:1){
+    -webkit-flex:@val;
+    flex:@val;
+}
+
+.flex-center(){
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.h(@h){
+    height: @h;
+}
+.w(@w){
+    width: @w;
+}
+.size(@w,@h){
+    .w(@w);
+    .h(@h);
+}
+.bg(@color:#fff){
+    background-color: @color;
+}
+.fs(@size){
+    font-size : @size;
+}
+.lh(@px){
+    line-height:@px;
+}
+
+.bd-b(@color:@CO-border){
+    border-bottom: solid 1px @color;
+}
+.bd-r(@color:@CO-border){
+    border-right: solid 1px @color;
+}
+.bd-l(@color:@CO-border){
+    border-left: solid 1px @color;
+}
+.bd-t(@color:@CO-border){
+    border-top: solid 1px @color;
+}
+.limitline(@num){
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:@num;
+}
+
+.transform(@param){
+    -webkit-transform:@param;
+    -o-transform:@param;
+    -ms-transform:@param;
+    transform:@param;
+    -moz-transform:@param;
+}
+
+.transition(@param){
+    transition: @param;
+    -ms-transition:@param;
+    -moz-transition: @param; /* Firefox 4 */
+    -webkit-transition: @param; /* Safari 和 Chrome */
+    -o-transition: @param; /* Opera */
+}
+
+.bd(@color:@CO-border){
+    border: solid 1px @color;
+}
+
+.bdb(@color:@CO-border){
+    border-bottom: solid 1px @color;
+}

@@ -1,0 +1,11 @@
+{
+  "name":"雅阳",
+  "version":"1.0.0",
+  "description": "Yayang Api Doc",
+  "title": "Yayang Api",
+  "url": "http://yayang.frenlee.cn/api",
+  "header": {
+    "title":"概述",
+    "filename":"apidoc-header.md"
+  }
+}

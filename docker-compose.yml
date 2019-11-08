@@ -1,0 +1,40 @@
+version: '3'
+services:
+  php-fpm:
+    build:
+      context: ./build/php-fpm
+    volumes: 
+      - ./:/data/workspace/yayang
+    expose:
+      - "9000"
+#    depends_on:
+#      - mysql
+
+  nginx:
+    build:
+      context: ./build/openresty
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes: 
+      - ./build/openresty/conf.d:/usr/local/openresty/nginx/conf/conf.d:ro
+      - ./:/data/workspace/yayang
+    depends_on:
+      - php-fpm
+#
+#  mysql:
+#    build:
+#      context: ./build/mysql
+#    privileged: true
+#    volumes:
+#      - mysql-data:/var/lib/mysql
+#      - ./build/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+#      - ./build/mysql/log:/var/log/mysql
+#    ports:
+#      - "3306:3306"
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=yayang@mysql
+
+
+volumes:
+  mysql-data:

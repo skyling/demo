@@ -1,0 +1,252 @@
+@charset "utf-8";
+@import "fun.less";
+
+body{
+  font-family: 'ContrailOne-Regular Microsoft YaHei' !important;
+  padding-top: 80px;
+}
+a{
+  text-decoration: none !important;
+}
+a:hover{
+  color: #1482F0 !important;
+}
+ul{
+  li{
+    list-style: none;
+  }
+}
+.CO-main{color: @CO-main !important;}
+.CO-30{color: @CO-30 !important;}
+.CO-32{color: @CO-32 !important;}
+.CO-88{color: @CO-88 !important;}
+.CO-56{color: @CO-56 !important;}
+.CO-9b{color: @CO-9b !important;}
+.CO-60{color: @CO-60 !important;}
+.CO-5b{color: #5b6367 !important;}
+.FS-10{.fs(10);}
+.FS-12{.fs(12);}
+.FS-14{.fs(14);}
+.FS-16{.fs(16);}
+
+.FL-l{float:left;}
+.FL-r{float:right;}
+.CLEAR:after,.CLEAR:before {display:table;content:"";}
+.CLEAR:after {clear:both;}
+.hidden{display:none !important;}
+.hide{display:none;}
+
+
+
+
+.layui-layer-imguide{
+  display: inline !important;
+}
+
+.layui-layer-imgbar{
+  display: block !important;
+}
+
+.gusto-link{
+  cursor: pointer;
+}
+.gusto-link:hover,.gusto-link:focus{
+  color: #E74C3C;
+  // text-decoration: underline;
+}
+
+
+.gst-border{
+    border: solid 1px #187ADF; 
+}
+
+.gst-container{
+    width: @MAXWIDTH;
+    margin: 0 auto;
+}
+
+.common-header{
+    height: 100px;
+    width: 100%;
+    background: url("@{imgpath}newsheader.jpg")no-repeat center/100% 100%;
+}
+
+/*公用头部导航*/
+.gusto-header-container{
+  padding: 0 24px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  .bd-b();
+  .bg(#fff);
+  .logo{
+    background: url("@{imgpath}logo.png") no-repeat left/174px auto;
+    width: 174px;
+    position: relative;
+    z-index: 1;
+    a{
+      display: block;
+    }
+  }
+  .header-top{
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .gusto-header-left{
+    position: relative;
+    z-index: 1;
+    width: 80px;
+    .lh(80px);
+    margin-right: -13px;
+    >div{
+      display: inline-block;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+    .gusto-language{
+      background: #E60012;
+      border-radius: 2px;
+      line-height: normal;
+      padding: 3px;
+      color: #fff;
+      text-align: center;
+      margin-right: 8px;
+      .transition(0.5s);
+    }
+    .gusto-language:hover{
+        padding: 10px;
+    }
+    .gusto-user{
+      .size(22px,22px);
+      border-radius: 50%;
+      background: url("@{imgpath}user.png") no-repeat center/22px 22px;
+    }
+  }
+}
+.gusto-nav{
+  .w(100%);
+  position: absolute;
+  left: 0;
+  top: 0;
+  .lh(80px);
+  text-align: center;
+  // margin-right: 10px;
+  margin-top: 0;
+  ul{
+    li{
+        a{
+          color:#6B8CAE;
+        }
+        a.active{
+          .bg(#1482F0);
+          padding: 4px 10px;
+          color: #fff;
+          border-radius: 3px;
+        }
+        a.active:hover{
+          color: #fff;
+        }
+        a:hover{
+          .bg(#1482F0);
+          padding: 4px 10px;
+          color: #fff;
+          border-radius: 3px;
+        }
+      }
+  }
+}
+
+#toTop{
+  background:url("@{imgpath}move-top.png") #686a70 no-repeat center;
+}
+
+.gusto-title{
+  text-align: left !important;
+  font-size: 28px !important;
+  color: #343033;
+  letter-spacing: -0.68px;
+  font-weight: bold;
+  .lh(1.1);
+  font-family: FZZCHJW--GB1-0 !important;
+  span{
+    padding-left: 6px;
+    font-family: 'ContrailOne-Regular' !important;
+    font-size: 27px;
+  }
+}
+.gusto-title.title-sideborder{
+  padding-left: 14px;
+  border-left: solid 4px #E60012;
+  margin-bottom: 30px;
+}
+.gusto-stitle{
+  .fs(1.2em) !important;
+}
+
+//头部 导航
+.gusto-topaside{
+    .lh(100px);
+    .bg(#F2F2F2);
+    .gst-topnav{
+        height: 100px;
+        width: @MAXWIDTH;
+        margin: 0 auto;
+        .gst-topnav-topic.gusto-title{
+            color: #fff;
+            font-size: 32px !important;
+            .lh(100px);
+        }
+        .gst-topnav-list{
+            // width: 240px;
+            float: right;
+            text-align: center;
+            li{
+                width: 110px;
+            }
+        }
+        .gst-topnav-step{
+            // width: 240px;
+            float: right;
+            li{
+                display: inline;
+                // padding: 0px;
+            }
+        }
+    }
+}
+
+
+.gusto-pages{
+    clear: both;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin-top: 17px;
+    margin-bottom: 40px;
+    a{
+      border: #dadada 1px solid;
+      padding: 2px 7px;
+      color: #666666;
+    }
+    a.curr,a:hover{
+      color:#fff;
+      background:#666666;
+      border:#000 1px solid;
+      font-weight:bold;
+     }
+}
+
+@media (max-width: 480px){
+    .header-top{
+      top:2%;
+    }
+}
+
+@media (max-width: 320px){
+    .header-top{
+      top:2%;
+    }
+}
