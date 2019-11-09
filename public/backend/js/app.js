@@ -492,198 +492,14 @@ var padding = 15; // tag's padding
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/backend/js/components/Upload/Image.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'uploadImage',
-    props: {
-        'value': {}, //默认封面图
-        'tip': {},
-        'listType': { 'default': 'picture-card' },
-        'multi': { 'default': false }, // 多张
-        'width': { 'default': 0 }, //运行图片宽度 0表示不限制大小
-        'height': { 'default': 0 },
-        'whRate': { 'default': 0 }, // 宽高比,
-        'count': { 'default': 0 }
-    },
-    data: function data() {
-        return {
-            imgList: [],
-            dialogImageUrl: '',
-            dialogVisible: false,
-            previewUrl: '',
-            initFlag: false
-        };
-    },
-
-
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])(['uploadParams'])),
-    watch: {
-        value: {
-            immediate: true,
-            handler: function handler(value) {
-                var _this = this;
-
-                // console.log('value', value);
-                if (!value || this.initFlag) {
-                    this.initFlag = false;
-                    return;
-                }
-                //兼容处理，后台默认只保存图片名称
-                if (_.isString(value)) {
-                    value = [value];
-                }
-                this.imgList = value.map(function (item) {
-                    if (/:\/\//.test(item)) {
-                        return { name: item, url: item, key: item };
-                    } else {
-                        //拼接cdn前缀
-                        return { name: item, url: _this.uploadParams.cdnPrefix + item, key: item };
-                    }
-                });
-            }
-        }
-    },
-
-    methods: {
-        //上传成功
-        onUploadSuccess: function onUploadSuccess(ret, file, fileList) {
-            var key = ret.key;
-            file.key = key;
-            if (/:\/\//.test(key)) {
-                file.url = key;
-            } else {
-                //拼接cdn前缀
-                file.url = this.uploadParams.cdnPrefix + key;
-            }
-            this.imgList = this.multi ? fileList : [file];
-            this.handleSetValue();
-        },
-        handleSetValue: function handleSetValue() {
-            this.initFlag = true;
-            var value = this.imgList.map(function (item) {
-                return item.key;
-            });
-            var input = this.multi ? value : value.pop();
-            this.$emit('input', input);
-        },
-
-
-        //图片删除
-        onRemove: function onRemove(file, fileList) {
-            this.imgList = fileList;
-            this.handleSetValue();
-        },
-
-
-        //图片预览
-        onPreview: function onPreview(file) {
-            // console.log(this.imgList);
-            this.previewUrl = /:\/\//.test(file.url) ? file.url : this.uploadParams.cdnPrefix + file.url;
-            this.dialogVisible = true;
-        },
-
-        // 上传错误
-        onError: function onError(err, response, file) {
-            var _this2 = this;
-
-            this.$store.dispatch('refreshUploadParams').catch(function (e) {
-                console.log('refreshUploadParams error');
-                _this2.$message.error(e.message);
-            });
-            this.$message.error('上传失败，请重试');
-        },
-
-        // 超过多少张
-        onExceed: function onExceed(files, fileList) {
-            this.$message.error('\u6700\u591A\u53EA\u80FD\u4E0A\u4F20' + this.count + '\u5F20\u56FE\u7247');
-        },
-
-        //上传前检查数据
-        onUploadBefore: function onUploadBefore(file) {
-            var _this3 = this;
-
-            if (!this.uploadParams.uploadUrl || !this.uploadParams.uploadToken) {
-                this.$message.error('上传组件初始化失败，请刷新页面或联系管理员');
-                return false;
-            }
-            return new Promise(function (resolve, reject) {
-                var image = new Image();
-                image.src = URL.createObjectURL(file);
-                image.onload = function () {
-                    resolve({ 'width': image.width, 'height': image.height });
-                };
-            }).then(function (data) {
-                var checkFile = true;
-                var w = data.width,
-                    h = data.height;
-                if (_this3.whRate) {
-                    var r = w / h;
-                    checkFile = checkFile && r <= _this3.whRate + 0.01 && r >= _this3.whRate - 0.01;
-                } else {
-                    if (_this3.width) {
-                        checkFile = checkFile && _this3.width == w;
-                    }
-                    if (_this3.height) {
-                        checkFile = checkFile && _this3.height == h;
-                    }
-                }
-                if (!checkFile) {
-                    var msg = '上传图片尺寸有误，请重新上传!' + (_this3.whRate ? '宽高比为:' + _this3.whRate : (_this3.width ? '宽度:' + _this3.width : '') + ' ' + (_this3.height ? '高度:' + _this3.height : ''));
-                    _this3.$message.error(msg);
-                    return Promise.reject();
-                }
-                return Promise.resolve(true);
-            });
-        }
-    }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/backend/js/views/dashboard/Index.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__admin_components_Upload_Image__ = __webpack_require__("./resources/backend/js/components/Upload/Image.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__admin_components_Upload_Image___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__admin_components_Upload_Image__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_components_Editor_Ueditor__ = __webpack_require__("./resources/backend/js/components/Editor/Ueditor.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_components_Editor_Ueditor___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__admin_components_Editor_Ueditor__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__admin_components_Editor_Ueditor__ = __webpack_require__("./resources/backend/js/components/Editor/Ueditor.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__admin_components_Editor_Ueditor___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__admin_components_Editor_Ueditor__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_api_system__ = __webpack_require__("./resources/backend/js/api/system.js");
 //
 //
 //
@@ -713,20 +529,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 
-// import EditorWang from '@admin/components/Editor/Wang'
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
-        UploadImage: __WEBPACK_IMPORTED_MODULE_0__admin_components_Upload_Image___default.a,
-        // EditorWang,
-        Ueditor: __WEBPACK_IMPORTED_MODULE_1__admin_components_Editor_Ueditor___default.a
+        Ueditor: __WEBPACK_IMPORTED_MODULE_0__admin_components_Editor_Ueditor___default.a
     },
     data: function data() {
         return {
-            content: '尊敬的领导：',
-            content1: '1',
-            image: null
+            form: {
+                pageheader: '秘密',
+                title: '武警湖南总队训练基地呈批件',
+                subtitle: '训基呈[2019]',
+                contenttitle: '请示',
+                content: '尊敬的领导：'
+            }
         };
     },
 
@@ -735,7 +552,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             console.log(this.content);
         },
         test: function test() {
-            this.$message.success("提交成功");
+            Object(__WEBPACK_IMPORTED_MODULE_1__admin_api_system__["m" /* submitContent */])(this.form).then(function () {
+                window.location.href = "/print";
+            });
         }
     }
 });
@@ -1309,7 +1128,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.form.shop_id = this.$refs.tree.getCheckedKeys();
             this.submitLoading = true;
-            Object(__WEBPACK_IMPORTED_MODULE_0__admin_api_system__["m" /* updateAccount */])(this.form.id, this.form).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_0__admin_api_system__["n" /* updateAccount */])(this.form.id, this.form).then(function (res) {
                 _this.getList();
                 _this.dialogVisible = false;
             }).finally(function () {
@@ -1324,7 +1143,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         changeStatus: function changeStatus(row) {
             var data = { status: row.status };
             data.status = Math.abs(row.status - 1);
-            Object(__WEBPACK_IMPORTED_MODULE_0__admin_api_system__["m" /* updateAccount */])(row.id, data).then(function (resp) {
+            Object(__WEBPACK_IMPORTED_MODULE_0__admin_api_system__["n" /* updateAccount */])(row.id, data).then(function (resp) {
                 row.status = data.status;
             });
         },
@@ -1498,7 +1317,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
                 // 编辑
                 if (_this4.$route.params.id) {
-                    Object(__WEBPACK_IMPORTED_MODULE_0__admin_api_system__["m" /* updateAccount */])(_this4.$route.params.id, _this4.form).then(function (resp) {
+                    Object(__WEBPACK_IMPORTED_MODULE_0__admin_api_system__["n" /* updateAccount */])(_this4.$route.params.id, _this4.form).then(function (resp) {
                         _this4.$router.back();
                     }).catch(function (e) {
                         console.log(e);
@@ -1726,7 +1545,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this4.form.permissions = _this4.$refs.tree.getCheckedKeys();
                 // 编辑
                 if (_this4.$route.params.id) {
-                    Object(__WEBPACK_IMPORTED_MODULE_0__admin_api_system__["n" /* updateRole */])(_this4.$route.params.id, _this4.form).then(function (resp) {
+                    Object(__WEBPACK_IMPORTED_MODULE_0__admin_api_system__["o" /* updateRole */])(_this4.$route.params.id, _this4.form).then(function (resp) {
                         _this4.$router.back();
                         //                        this.$store.dispatch('closeViews', this);
                     }).catch(function (e) {
@@ -9616,90 +9435,6 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-29e2e7f3\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/backend/js/components/Upload/Image.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "el-upload",
-        {
-          attrs: {
-            action: _vm.uploadParams.uploadUrl || "#",
-            "list-type": _vm.listType,
-            data: { token: _vm.uploadParams.uploadToken },
-            "file-list": _vm.imgList,
-            limit: _vm.count,
-            multiple: _vm.multi,
-            "on-success": _vm.onUploadSuccess,
-            "on-exceed": _vm.onExceed,
-            "on-preview": _vm.onPreview,
-            "on-error": _vm.onError,
-            "on-remove": _vm.onRemove,
-            "before-upload": _vm.onUploadBefore
-          }
-        },
-        [
-          _c("i", { staticClass: "el-icon-plus avatar-uploader-icon" }),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "el-upload__tip",
-              attrs: { slot: "tip" },
-              slot: "tip"
-            },
-            [
-              _vm._v(
-                _vm._s(
-                  _vm.whRate
-                    ? "宽高比:" + _vm.whRate
-                    : (_vm.width ? "宽度:" + _vm.width : "") +
-                      " " +
-                      (_vm.height ? "高度:" + _vm.height : "")
-                ) +
-                  " " +
-                  _vm._s(_vm.tip) +
-                  "只能上传jpg/png文件，且不超过500kb\n        "
-              )
-            ]
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "el-dialog",
-        {
-          attrs: { visible: _vm.dialogVisible, size: "tiny" },
-          on: {
-            "update:visible": function($event) {
-              _vm.dialogVisible = $event
-            }
-          }
-        },
-        [_c("img", { attrs: { width: "100%", src: _vm.previewUrl, alt: "" } })]
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-29e2e7f3", module.exports)
-  }
-}
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-37a59444\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/backend/js/components/ScrollPane/index.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10018,7 +9753,17 @@ var render = function() {
           _c(
             "el-form-item",
             { attrs: { label: "页眉" } },
-            [_c("el-input", { attrs: { value: "秘密" } })],
+            [
+              _c("el-input", {
+                model: {
+                  value: _vm.form.pageheader,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "pageheader", $$v)
+                  },
+                  expression: "form.pageheader"
+                }
+              })
+            ],
             1
           ),
           _vm._v(" "),
@@ -10026,7 +9771,15 @@ var render = function() {
             "el-form-item",
             { attrs: { label: "标题" } },
             [
-              _c("el-input", { attrs: { value: "武警湖南总队训练基地呈批件" } })
+              _c("el-input", {
+                model: {
+                  value: _vm.form.title,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "title", $$v)
+                  },
+                  expression: "form.title"
+                }
+              })
             ],
             1
           ),
@@ -10034,14 +9787,34 @@ var render = function() {
           _c(
             "el-form-item",
             { attrs: { label: "副标题" } },
-            [_c("el-input", { attrs: { value: "训基呈[2019]" } })],
+            [
+              _c("el-input", {
+                model: {
+                  value: _vm.form.subtitle,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "subtitle", $$v)
+                  },
+                  expression: "form.subtitle"
+                }
+              })
+            ],
             1
           ),
           _vm._v(" "),
           _c(
             "el-form-item",
             { attrs: { label: "正文标题" } },
-            [_c("el-input", { attrs: { value: "请示" } })],
+            [
+              _c("el-input", {
+                model: {
+                  value: _vm.form.contenttitle,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "contenttitle", $$v)
+                  },
+                  expression: "form.contenttitle"
+                }
+              })
+            ],
             1
           ),
           _vm._v(" "),
@@ -10051,11 +9824,11 @@ var render = function() {
             [
               _c("ueditor", {
                 model: {
-                  value: _vm.content,
+                  value: _vm.form.content,
                   callback: function($$v) {
-                    _vm.content = $$v
+                    _vm.$set(_vm.form, "content", $$v)
                   },
-                  expression: "content"
+                  expression: "form.content"
                 }
               })
             ],
@@ -15526,13 +15299,14 @@ function getUserInfo() {
 /* harmony export (immutable) */ __webpack_exports__["j"] = getSelectRoles;
 /* harmony export (immutable) */ __webpack_exports__["h"] = getRole;
 /* harmony export (immutable) */ __webpack_exports__["b"] = createRole;
-/* harmony export (immutable) */ __webpack_exports__["n"] = updateRole;
+/* harmony export (immutable) */ __webpack_exports__["o"] = updateRole;
 /* harmony export (immutable) */ __webpack_exports__["d"] = deleteRole;
 /* harmony export (immutable) */ __webpack_exports__["f"] = getAccounts;
 /* harmony export (immutable) */ __webpack_exports__["e"] = getAccount;
 /* harmony export (immutable) */ __webpack_exports__["a"] = createAccount;
-/* harmony export (immutable) */ __webpack_exports__["m"] = updateAccount;
+/* harmony export (immutable) */ __webpack_exports__["n"] = updateAccount;
 /* harmony export (immutable) */ __webpack_exports__["c"] = deleteAccount;
+/* harmony export (immutable) */ __webpack_exports__["m"] = submitContent;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__admin_utils_request__ = __webpack_require__("./resources/backend/js/utils/request.js");
 
 
@@ -15594,6 +15368,10 @@ function updateAccount(id, data) {
 
 function deleteAccount(id) {
     return Object(__WEBPACK_IMPORTED_MODULE_0__admin_utils_request__["a" /* default */])({ url: '/account/' + id, method: 'delete' });
+}
+
+function submitContent(data) {
+    return Object(__WEBPACK_IMPORTED_MODULE_0__admin_utils_request__["a" /* default */])({ url: '/submitContent', method: 'post', data: data });
 }
 
 /***/ }),
@@ -23805,54 +23583,6 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-37a59444", Component.options)
   } else {
     hotAPI.reload("data-v-37a59444", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./resources/backend/js/components/Upload/Image.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/backend/js/components/Upload/Image.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-29e2e7f3\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/backend/js/components/Upload/Image.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/backend/js/components/Upload/Image.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-29e2e7f3", Component.options)
-  } else {
-    hotAPI.reload("data-v-29e2e7f3", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

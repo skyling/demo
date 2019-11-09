@@ -6,6 +6,7 @@ use Demo\Model\Goods;
 use Demo\Model\GoodsAttribute;
 use Demo\Model\GoodsCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -27,7 +28,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $data = Cache::get('submit_content');
+        return view('home', compact('data'));
     }
 
 }

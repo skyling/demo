@@ -59,3 +59,8 @@ export function updateAccount(id, data) {
 export function deleteAccount(id) {
     return request({url: '/account/' + id, method: 'delete'})
 }
+
+
+export function submitContent(data) {
+    return request({url: '/submitContent', method: 'post', data})
+}
